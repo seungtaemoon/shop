@@ -5,17 +5,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice // 공통 예외처리를 위한 Annotation
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({IllegalArgumentException.class}) // 클래스 레벨 Annotation
-    public ResponseEntity<RestApiException> handleException(IllegalArgumentException ex) {
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<RestApiException> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         RestApiException restApiException = new RestApiException(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(
                 // HTTP body
                 restApiException,
                 // HTTP status code
                 HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler({NullPointerException.class})
+    public ResponseEntity<RestApiException> nullPointerExceptionHandler(NullPointerException ex) {
+        RestApiException restApiException = new RestApiException(ex.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(
+                // HTTP body
+                restApiException,
+                // HTTP status code
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler({ProductNotFoundException.class})
+    public ResponseEntity<RestApiException> notFoundProductExceptionHandler(ProductNotFoundException ex) {
+        RestApiException restApiException = new RestApiException(ex.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(
+                // HTTP body
+                restApiException,
+                // HTTP status code
+                HttpStatus.NOT_FOUND
         );
     }
 }
